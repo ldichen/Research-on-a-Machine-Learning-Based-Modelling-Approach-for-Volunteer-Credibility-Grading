@@ -7,7 +7,6 @@ class ME:
     def __init__(self, y_true, y_pred):
         self.true = y_true
         self.pred = y_pred
-        self.macro_p()
     def macro_p(self):
         macro_precision = precision_score(self.true, self.pred, average='macro')
         print("Macro-average precision:", macro_precision)

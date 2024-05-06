@@ -18,6 +18,6 @@ ECA_df['usualEdit'] =ECA_df.iloc[:, 35] + ECA_df.iloc[:, 36] + ECA_df.iloc[:, 37
 ECA_df = ECA_df.drop(ECA_df.columns[35:52], axis=1)
 ECA_df.drop(columns=['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun','dis_responses','com_changesets','Discussed_changesets','num_comments','years_passed'], inplace=True)
 
-output_csv = 'D:\\Desktop\\data\\EAC\\EACupdate.csv'
+output_csv = 'D:\\Desktop\\data\\EAC\\EACupdate3.csv'
 ECA_df.to_csv(output_csv, index=False)
 
