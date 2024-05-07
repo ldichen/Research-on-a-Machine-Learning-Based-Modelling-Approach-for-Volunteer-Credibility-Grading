@@ -9,15 +9,15 @@ from sklearn.model_selection import GridSearchCV, StratifiedKFold, KFold
 from modelEvaluation import ME
 import matplotlib.pyplot as plt
 import shap
-
-# 'D:\\Desktop\\data\\EAC\\EAC3.csv'  'D:\\Desktop\\data\\EAC\\EACupdate.csv'
-csv_file_path = 'D:\\Desktop\\data\\EAC\\EACupdate3.csv'
-ECA_df = pd.read_csv(csv_file_path)
-# csv_file_path = "E:\\Download\\seeds\\seeds_dataset.txt"
-# ECA_df = pd.read_csv(csv_file_path, sep='\s+', header=None, converters={7: lambda x: int(x) - 1})
-# ECA_df.rename(columns={0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: 'class'}, inplace=True)
+# 'D:\\Desktop\\data\\EAC\\EACupdate5.csv'
+# 'D:\\Desktop\\data\\EAC\\EAC3.csv'  'D:\\Desktop\\data\\EAC\\EACupdate.csv'"E:\\Download\\seeds\\seeds_dataset.txt"
+csv_file_path = "E:\\Download\\seeds\\seeds_dataset.txt"
+# ECA_df = pd.read_csv(csv_file_path)
+# csv_file_path = "E:\\Download\\seeds\\seeds_dataset.txt" sep='\s+'  , header=None
+ECA_df = pd.read_csv(csv_file_path,sep='\s+', header=None, converters={7: lambda x: int(x) - 1})
+# print(ECA_df)  0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6',
+ECA_df.rename(columns={0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6',7: 'class'}, inplace=True)
 # region ###########################randomly set actual value###################################
-
 # # 生成高斯分布数据
 # mu = 3  # 平均值
 # sigma = 1  # 标准差
@@ -40,10 +40,10 @@ ECA_df = pd.read_csv(csv_file_path)
 # print(column_counts)
 # endregion
 
-X = ECA_df.drop(columns=['uid', 'acc', 'class'])
-Y = ECA_df['class']
-# X = ECA_df.drop(columns=['class'])
+# X = ECA_df.drop(columns=['uid', 'acc', 'class'])
 # Y = ECA_df['class']
+X = ECA_df.drop(columns=['class'])
+Y = ECA_df['class']
 # 划分训练集和测试集
 X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
 # declare parameters
@@ -88,15 +88,19 @@ xgb_clf = XGBClassifier(objective='multi:softmax', num_class=3, booster='gbtree'
 # # 输出最佳模型的性能评分
 # print("Best Score:", grid_search.best_score_)
 xgb_clf.fit(X_train, y_train)
-xgb_clf.save_model('./EAC_model.json')
+# xgb_clf.save_model('./EAC_model.json')
 
 # xgb_clf.fit(X_train, y_train)
 
 explainer = shap.TreeExplainer(xgb_clf,X_train)
 shap_values = explainer(X_train)
-# shap.plots.bar(shap_values[:, :, 1],max_display=50)
+# shap.plots.bar(shap_values[:, :, 0],max_display=50)
+# shap.plots.beeswarm(shap_values[:, :, 0],max_display=50)
+shap.plots.bar(shap_values[:, :, 1],max_display=50)
 shap.plots.beeswarm(shap_values[:, :, 1],max_display=50)
-
+# shap.plots.waterfall(shap_values[:, :, 0])
+# shap.plots.bar(shap_values[0],max_display=50)
+# shap.plots.beeswarm(shap_values[:, :, 1],max_display=50)
 # 在测试集上进行预测
 y_pred = xgb_clf.predict(X_test)
 #
